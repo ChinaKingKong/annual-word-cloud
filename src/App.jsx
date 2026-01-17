@@ -238,7 +238,7 @@ const App = () => {
 
   // 缓存 sphereRadius 计算，避免每次渲染都重新计算
   const sphereRadius = useMemo(() => {
-    return sphereRef.current ? Math.min(sphereRef.current.offsetWidth, sphereRef.current.offsetHeight) * 0.38 : 140;
+    return sphereRef.current ? Math.min(sphereRef.current.offsetWidth, sphereRef.current.offsetHeight) * 0.55 : 250;
   }, []);
 
   const project = (point) => {
