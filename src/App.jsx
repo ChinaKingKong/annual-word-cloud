@@ -326,9 +326,11 @@ const App = () => {
 
         {/* 展示截图区 */}
         <div ref={captureAreaRef} className="relative flex-grow h-[650px] w-full bg-black overflow-hidden select-none">
-          <div className="absolute top-10 left-10 z-40 flex items-start gap-5">
-            <div className="bg-indigo-600 p-3 rounded-2xl shadow-xl border border-white/10"><Icons.Globe /></div>
-            <div className="flex flex-col">
+          <div className="absolute top-10 left-10 z-40 flex items-start gap-4">
+            <div className="rounded-2xl shadow-xl border border-white/10">
+              <img src="/logo.png" alt="Logo" className="w-16 h-16 rounded-2xl shadow-xl border border-white/10" />
+            </div>
+            <div className="flex flex-col mt-2">
               <h1 className={`text-2xl font-black tracking-widest uppercase italic leading-none ${isExporting ? 'text-slate-100' : 'bg-gradient-to-r from-white to-slate-500 bg-clip-text text-transparent'}`}>{language === 'zh' ? `我的${year}年度词云` : `My ${year} WordCloud`}</h1>
               <p className="text-indigo-400/40 text-[11px] font-black uppercase tracking-[0.4em] mt-3">{currentT.subtitle}</p>
             </div>
