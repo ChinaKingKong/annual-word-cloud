@@ -276,33 +276,33 @@ const App = () => {
   const currentT = t[language];
 
   return (
-    <div className={`min-h-screen p-4 md:p-6 flex items-center justify-center text-slate-100 ${isExporting ? 'is-capturing' : ''}`}>
+    <div className={`min-h-screen p-2 sm:p-4 md:p-6 flex items-center justify-center text-slate-100 ${isExporting ? 'is-capturing' : ''}`}>
       <audio ref={audioRef} src={audioFile} loop preload="auto" />
       {statusMessage && (
-        <div className="fixed top-20 left-1/2 -translate-x-1/2 z-[100] bg-indigo-600/90 backdrop-blur-md px-6 py-3 rounded-2xl border border-white/20 shadow-2xl flex items-center gap-3 animate-bounce">
+        <div className="fixed top-16 sm:top-20 left-1/2 -translate-x-1/2 z-[100] bg-indigo-600/90 backdrop-blur-md px-4 sm:px-6 py-2 sm:py-3 rounded-xl sm:rounded-2xl border border-white/20 shadow-2xl flex items-center gap-2 sm:gap-3 animate-bounce max-w-[90vw]">
           <Icons.Loader />
-          <span className="text-xs font-bold uppercase tracking-widest">{statusMessage}</span>
+          <span className="text-[10px] sm:text-xs font-bold uppercase tracking-widest break-words">{statusMessage}</span>
         </div>
       )}
 
-      <div className="w-full max-w-5xl bg-[#070b14] rounded-[2.5rem] shadow-2xl overflow-hidden border border-white/5 relative flex flex-col">
+      <div className="w-full max-w-5xl bg-[#070b14] rounded-xl sm:rounded-2xl md:rounded-[2.5rem] shadow-2xl overflow-hidden border border-white/5 relative flex flex-col">
 
         {/* 顶部工具栏 */}
-        <div className="px-6 py-4 flex flex-wrap items-center justify-between gap-4 border-b border-white/5 bg-black/40 backdrop-blur-md relative z-50">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center bg-white/5 rounded-xl border border-white/10 overflow-hidden shadow-inner">
-              <button onClick={() => setYear(y => y - 1)} className="hover:bg-white/10 p-2 text-indigo-400 transition-colors border-r border-white/5"><Icons.ChevronLeft /></button>
-              <div className="px-3"><span className="text-xs font-black text-white tracking-tighter">{year}</span></div>
-              <button onClick={() => setYear(y => y + 1)} className="hover:bg-white/10 p-2 text-indigo-400 transition-colors border-l border-white/5"><Icons.ChevronRight /></button>
+        <div className="px-3 sm:px-4 md:px-6 py-3 sm:py-4 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-between gap-2 sm:gap-3 md:gap-4 border-b border-white/5 bg-black/40 backdrop-blur-md relative z-50">
+          <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0 order-1">
+            <div className="flex items-center bg-white/5 rounded-lg sm:rounded-xl border border-white/10 overflow-hidden shadow-inner">
+              <button onClick={() => setYear(y => y - 1)} className="hover:bg-white/10 active:bg-white/20 p-1.5 sm:p-2 text-indigo-400 transition-colors border-r border-white/5 touch-manipulation"><Icons.ChevronLeft /></button>
+              <div className="px-2 sm:px-3"><span className="text-[10px] sm:text-xs font-black text-white tracking-tighter">{year}</span></div>
+              <button onClick={() => setYear(y => y + 1)} className="hover:bg-white/10 active:bg-white/20 p-1.5 sm:p-2 text-indigo-400 transition-colors border-l border-white/5 touch-manipulation"><Icons.ChevronRight /></button>
             </div>
-            <button onClick={() => setLanguage(l => l === 'zh' ? 'en' : 'zh')} className="px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-indigo-400 text-[10px] font-black uppercase transition-all hover:bg-white/10">
+            <button onClick={() => setLanguage(l => l === 'zh' ? 'en' : 'zh')} className="px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg sm:rounded-xl bg-white/5 border border-white/10 text-indigo-400 text-[9px] sm:text-[10px] font-black uppercase transition-all hover:bg-white/10 active:bg-white/20 touch-manipulation">
               {currentT.lang}
             </button>
           </div>
 
-          <form onSubmit={handleAddWord} className="flex items-stretch max-w-[200px] h-9 bg-black/30 rounded-xl border border-white/10 overflow-hidden focus-within:border-indigo-500/50 transition-all mr-3">
-            <input type="text" value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder={currentT.placeholder} className="flex-1 bg-transparent px-4 py-1 text-xs focus:outline-none text-slate-100 placeholder:text-slate-600 tracking-tight" />
-            <button type="submit" className="w-8 bg-white/5 hover:bg-indigo-600 transition-colors flex items-center justify-center group flex-shrink-0" style={{ padding: 0 }}>
+          <form onSubmit={handleAddWord} className="flex items-stretch flex-1 sm:flex-initial sm:max-w-[200px] h-8 sm:h-9 bg-black/30 rounded-lg sm:rounded-xl border border-white/10 overflow-hidden focus-within:border-indigo-500/50 transition-all order-3 sm:order-2">
+            <input type="text" value={inputValue} onChange={(e) => setInputValue(e.target.value)} placeholder={currentT.placeholder} className="flex-1 bg-transparent px-3 sm:px-4 py-1 text-[11px] sm:text-xs focus:outline-none text-slate-100 placeholder:text-slate-600 tracking-tight" />
+            <button type="submit" className="w-8 bg-white/5 hover:bg-indigo-600 active:bg-indigo-700 transition-colors flex items-center justify-center group flex-shrink-0 touch-manipulation" style={{ padding: 0 }}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="text-slate-400 group-hover:text-white transition-colors">
                 <line x1="12" y1="5" x2="12" y2="19"/>
                 <line x1="5" y1="12" x2="19" y2="12"/>
@@ -310,37 +310,37 @@ const App = () => {
             </button>
           </form>
 
-          <div className="flex items-center gap-2">
-            <button onClick={() => setIsAutoRotating(!isAutoRotating)} className={`p-2 rounded-xl border transition-all ${isAutoRotating ? 'bg-indigo-600/10 border-indigo-500/50 text-indigo-400 shadow-lg' : 'bg-white/5 border-white/10 text-slate-500'}`}>
+          <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap order-2 sm:order-3">
+            <button onClick={() => setIsAutoRotating(!isAutoRotating)} className={`p-1.5 sm:p-2 rounded-lg sm:rounded-xl border transition-all active:scale-95 touch-manipulation ${isAutoRotating ? 'bg-indigo-600/10 border-indigo-500/50 text-indigo-400 shadow-lg' : 'bg-white/5 border-white/10 text-slate-500'}`}>
               {isAutoRotating ? <Icons.Pause /> : <Icons.Play />}
             </button>
-            <button onClick={toggleAudio} className={`p-2 rounded-xl border transition-all ${isPlaying ? 'bg-green-600/10 border-green-500/50 text-green-400 shadow-lg' : 'bg-white/5 border-white/10 text-slate-500'}`} title={isPlaying ? (language === 'zh' ? '暂停音频' : 'Pause Audio') : (language === 'zh' ? '播放音频' : 'Play Audio')}>
+            <button onClick={toggleAudio} className={`p-1.5 sm:p-2 rounded-lg sm:rounded-xl border transition-all active:scale-95 touch-manipulation ${isPlaying ? 'bg-green-600/10 border-green-500/50 text-green-400 shadow-lg' : 'bg-white/5 border-white/10 text-slate-500'}`} title={isPlaying ? (language === 'zh' ? '暂停音频' : 'Pause Audio') : (language === 'zh' ? '播放音频' : 'Play Audio')}>
               <Icons.Audio />
             </button>
-            <button onClick={() => setPaletteIndex(prev => (prev + 1) % palettes.length)} className="p-2 rounded-xl bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 transition-all"><Icons.Palette /></button>
-            <button onClick={saveAsImage} className="relative group overflow-hidden px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 transition-all bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg active:scale-95">
-              <Icons.Camera /> {currentT.save}
+            <button onClick={() => setPaletteIndex(prev => (prev + 1) % palettes.length)} className="p-1.5 sm:p-2 rounded-lg sm:rounded-xl bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 active:scale-95 transition-all touch-manipulation"><Icons.Palette /></button>
+            <button onClick={saveAsImage} className="relative group overflow-hidden px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg sm:rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 sm:gap-2 transition-all bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg active:scale-95 touch-manipulation">
+              <Icons.Camera /> <span className="hidden xs:inline">{currentT.save}</span>
             </button>
           </div>
         </div>
 
         {/* 展示截图区 */}
-        <div ref={captureAreaRef} className="relative flex-grow h-[650px] w-full bg-black overflow-hidden select-none">
-          <div className="absolute top-10 left-10 z-40 flex items-start gap-4">
-            <div className="rounded-2xl shadow-xl border border-white/10">
-              <img src="/logo.png" alt="Logo" className="w-16 h-16 rounded-2xl shadow-xl border border-white/10" />
+        <div ref={captureAreaRef} className="relative flex-grow h-[400px] sm:h-[500px] md:h-[600px] lg:h-[650px] w-full bg-black overflow-hidden select-none">
+          <div className="absolute top-4 sm:top-6 md:top-8 lg:top-10 left-4 sm:left-6 md:left-8 lg:left-10 z-40 flex items-start gap-2 sm:gap-3 md:gap-4">
+            <div className="rounded-xl sm:rounded-2xl shadow-xl border border-white/10 flex-shrink-0">
+              <img src="/logo.png" alt="Logo" className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 lg:w-16 lg:h-16 rounded-xl sm:rounded-2xl shadow-xl border border-white/10" />
             </div>
-            <div className="flex flex-col mt-2">
-              <h1 className={`text-2xl font-black tracking-widest uppercase italic leading-none ${isExporting ? 'text-slate-100' : 'bg-gradient-to-r from-white to-slate-500 bg-clip-text text-transparent'}`}>{language === 'zh' ? `我的${year}年度词云` : `My ${year} WordCloud`}</h1>
-              <p className="text-indigo-400/40 text-[11px] font-black uppercase tracking-[0.4em] mt-3">{currentT.subtitle}</p>
+            <div className="flex flex-col mt-0.5 sm:mt-1 md:mt-2 min-w-0">
+              <h1 className={`text-sm sm:text-lg md:text-xl lg:text-2xl font-black tracking-tight sm:tracking-wide md:tracking-widest uppercase italic leading-tight sm:leading-none break-words ${isExporting ? 'text-slate-100' : 'bg-gradient-to-r from-white to-slate-500 bg-clip-text text-transparent'}`}>{language === 'zh' ? `我的${year}年度词云` : `My ${year} WordCloud`}</h1>
+              <p className="text-indigo-400/40 text-[8px] sm:text-[9px] md:text-[10px] lg:text-[11px] font-black uppercase tracking-[0.15em] sm:tracking-[0.25em] md:tracking-[0.35em] lg:tracking-[0.4em] mt-1 sm:mt-2 md:mt-3">{currentT.subtitle}</p>
             </div>
           </div>
 
-          <div ref={sphereRef} className="absolute inset-0 w-full h-full flex items-center justify-center translate-y-12">
+          <div ref={sphereRef} className="absolute inset-0 w-full h-full flex items-center justify-center translate-y-6 sm:translate-y-8 md:translate-y-10 lg:translate-y-12">
             <div className="absolute inset-0 z-10 pointer-events-none" style={{ background: `radial-gradient(circle at center, ${palettes[paletteIndex].tone} 0%, transparent 60%)` }} />
             <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-0">
-              <span className={`text-[12vw] font-black italic select-none leading-none px-10 transition-all ${isExporting ? 'text-white/20' : 'text-transparent bg-clip-text bg-gradient-to-b from-white/30 via-white/15 to-transparent'}`}>{year}</span>
-              <span className="text-[6vw] leading-none mt-6 opacity-30" style={isExporting ? { color: 'rgba(255,255,255,0.2)' } : { filter: 'grayscale(1) brightness(1.5)', color: 'white' }}>{getZodiacIcon(year)}</span>
+              <span className={`text-[10vw] sm:text-[11vw] md:text-[11.5vw] lg:text-[12vw] font-black italic select-none leading-none px-4 sm:px-6 md:px-8 lg:px-10 transition-all ${isExporting ? 'text-white/20' : 'text-transparent bg-clip-text bg-gradient-to-b from-white/30 via-white/15 to-transparent'}`}>{year}</span>
+              <span className="text-[5vw] sm:text-[5.5vw] md:text-[5.8vw] lg:text-[6vw] leading-none mt-2 sm:mt-3 md:mt-4 lg:mt-6 opacity-30" style={isExporting ? { color: 'rgba(255,255,255,0.2)' } : { filter: 'grayscale(1) brightness(1.5)', color: 'white' }}>{getZodiacIcon(year)}</span>
             </div>
             <div className="relative w-0 h-0 flex items-center justify-center z-20">
               {textureParticles.map((p, i) => {
@@ -392,26 +392,26 @@ const App = () => {
         </div>
 
         {/* 底部词条管理 */}
-        <div className="px-8 py-6 bg-slate-950/95 border-t border-white/5 relative z-50">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
+        <div className="px-3 sm:px-5 md:px-6 lg:px-8 py-3 sm:py-4 md:py-5 lg:py-6 bg-slate-950/95 border-t border-white/5 relative z-50">
+          <div className="flex items-center justify-between mb-2 sm:mb-3 md:mb-4 flex-wrap gap-2">
+            <div className="flex items-center gap-1.5 sm:gap-2">
               <Icons.Cpu />
-              <span className="text-[10px] text-indigo-400 font-black uppercase tracking-[0.3em] flex items-center gap-2">{currentT.recording} {words.length} {currentT.unit}</span>
+              <span className="text-[8px] sm:text-[9px] md:text-[10px] text-indigo-400 font-black uppercase tracking-[0.15em] sm:tracking-[0.2em] md:tracking-[0.3em] flex items-center gap-1 sm:gap-2 whitespace-nowrap">{currentT.recording} {words.length} {currentT.unit}</span>
             </div>
             <button
               onClick={handleClearCache}
-              className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 hover:text-red-400 hover:border-red-500/50 text-[10px] font-black uppercase tracking-wider transition-all"
+              className="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-white/5 border border-white/10 text-slate-400 hover:text-red-400 hover:border-red-500/50 active:bg-red-500/10 active:border-red-500/30 text-[8px] sm:text-[9px] md:text-[10px] font-black uppercase tracking-wider transition-all touch-manipulation"
               title={language === 'zh' ? '清除缓存并恢复默认' : 'Clear cache and reset'}
             >
               {language === 'zh' ? '清除缓存' : 'Reset'}
             </button>
           </div>
-          <div className="flex flex-wrap gap-2 max-h-24 overflow-y-auto pr-2 custom-scrollbar">
+          <div className="flex flex-wrap gap-1.5 sm:gap-2 max-h-16 sm:max-h-20 md:max-h-24 overflow-y-auto pr-1 sm:pr-2 custom-scrollbar">
             {words.map((w, i) => (
-              <div key={i + w.text} className="group flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 hover:border-indigo-500/50 transition-all cursor-default">
-                <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: palettes[paletteIndex].colors[i % palettes[paletteIndex].colors.length] }} />
-                <span className="text-[10px] font-bold text-slate-400 group-hover:text-white uppercase tracking-tighter">{w.text}</span>
-                <button onClick={() => handleDeleteWord(i)} className="p-0.5 rounded-md hover:bg-red-500 hover:text-white text-slate-600 transition-colors"><Icons.X /></button>
+              <div key={i + w.text} className="group flex items-center gap-1.5 sm:gap-2 px-2 sm:px-2.5 md:px-3 py-1 sm:py-1.5 rounded-lg sm:rounded-xl bg-white/5 border border-white/10 hover:border-indigo-500/50 transition-all cursor-default">
+                <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: palettes[paletteIndex].colors[i % palettes[paletteIndex].colors.length] }} />
+                <span className="text-[8px] sm:text-[9px] md:text-[10px] font-bold text-slate-400 group-hover:text-white uppercase tracking-tighter break-words max-w-[120px] sm:max-w-none">{w.text}</span>
+                <button onClick={() => handleDeleteWord(i)} className="p-0.5 rounded-md hover:bg-red-500 hover:text-white active:bg-red-600 text-slate-600 transition-colors flex-shrink-0 touch-manipulation"><Icons.X /></button>
               </div>
             ))}
           </div>
