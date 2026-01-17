@@ -82,5 +82,12 @@ export const Icons = {
       <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/>
       <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/>
     </svg>
+  ),
+  Audio: () => (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+      <path d="M19.07 20.07a8 8 0 0 1 0-11.14"/>
+      <path d="M15.54 16.54a4 4 0 0 1 0-5.08"/>
+    </svg>
   )
 };

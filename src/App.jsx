@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import html2canvas from 'html2canvas';
 import { Icons } from './components/Icons';
+import audioFile from './assets/audio.mp3';
 import './index.css';
 
 const App = () => {
@@ -9,12 +10,15 @@ const App = () => {
   const [inputValue, setInputValue] = useState('');
   const [isExporting, setIsExporting] = useState(false);
   const [statusMessage, setStatusMessage] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const captureAreaRef = useRef(null);
   const sphereRef = useRef(null);
   const requestRef = useRef();
   const rotationRef = useRef({ x: 0, y: 0 });
+  const lastUpdateTimeRef = useRef(0);
   const [rotation, setRotation] = useState({ x: 0, y: 0 });
+  const audioRef = useRef(null);
 
   const t = {
     zh: {
@@ -143,19 +147,67 @@ const App = () => {
     return particles;
   }, []);
 
-  const animate = () => {
+  // 优化动画：使用节流来减少 state 更新频率
+  const animate = (currentTime) => {
     if (isAutoRotating && !isExporting) {
       rotationRef.current.x += 0.002;
       rotationRef.current.y += 0.004;
-      setRotation({ ...rotationRef.current });
+      
+      // 每 16ms 更新一次 state（约 60fps），减少不必要的渲染
+      if (currentTime - lastUpdateTimeRef.current >= 16) {
+        setRotation({ x: rotationRef.current.x, y: rotationRef.current.y });
+        lastUpdateTimeRef.current = currentTime;
+      }
     }
     requestRef.current = requestAnimationFrame(animate);
   };
 
   useEffect(() => {
+    lastUpdateTimeRef.current = performance.now();
     requestRef.current = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(requestRef.current);
   }, [isAutoRotating, isExporting]);
+
+  // 初始化音频设置
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    // 设置音频属性
+    audio.volume = 0.5; // 设置音量
+    audio.preload = 'auto';
+
+    // 监听播放状态变化
+    const handlePlay = () => setIsPlaying(true);
+    const handlePause = () => setIsPlaying(false);
+    const handleEnded = () => setIsPlaying(false);
+
+    audio.addEventListener('play', handlePlay);
+    audio.addEventListener('pause', handlePause);
+    audio.addEventListener('ended', handleEnded);
+
+    return () => {
+      audio.removeEventListener('play', handlePlay);
+      audio.removeEventListener('pause', handlePause);
+      audio.removeEventListener('ended', handleEnded);
+    };
+  }, []);
+
+  // 切换音频播放/暂停
+  const toggleAudio = async () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    try {
+      if (isPlaying) {
+        audio.pause();
+      } else {
+        await audio.play();
+      }
+    } catch (error) {
+      console.error('音频播放失败:', error);
+    }
+  };
 
   // 自动保存词条到 localStorage
   useEffect(() => {
@@ -184,6 +236,11 @@ const App = () => {
     }
   }, [paletteIndex]);
 
+  // 缓存 sphereRadius 计算，避免每次渲染都重新计算
+  const sphereRadius = useMemo(() => {
+    return sphereRef.current ? Math.min(sphereRef.current.offsetWidth, sphereRef.current.offsetHeight) * 0.38 : 140;
+  }, []);
+
   const project = (point) => {
     const { x, y, z } = point;
     const { x: rx, y: ry } = rotation;
@@ -191,7 +248,6 @@ const App = () => {
     let nz = x * Math.sin(ry) + z * Math.cos(ry);
     let ny = y * Math.cos(rx) - nz * Math.sin(rx);
     let finalZ = y * Math.sin(rx) + nz * Math.cos(rx);
-    const sphereRadius = sphereRef.current ? Math.min(sphereRef.current.offsetWidth, sphereRef.current.offsetHeight) * 0.38 : 140;
     const scale = (finalZ + 2) / 3;
     const opacity = (finalZ + 1.5) / 2.5;
     return { x: nx * sphereRadius, y: ny * sphereRadius, scale, opacity, zIndex: Math.floor(finalZ * 1000) };
@@ -221,6 +277,7 @@ const App = () => {
 
   return (
     <div className={`min-h-screen p-4 md:p-6 flex items-center justify-center text-slate-100 ${isExporting ? 'is-capturing' : ''}`}>
+      <audio ref={audioRef} src={audioFile} loop preload="auto" />
       {statusMessage && (
         <div className="fixed top-20 left-1/2 -translate-x-1/2 z-[100] bg-indigo-600/90 backdrop-blur-md px-6 py-3 rounded-2xl border border-white/20 shadow-2xl flex items-center gap-3 animate-bounce">
           <Icons.Loader />
@@ -257,6 +314,9 @@ const App = () => {
             <button onClick={() => setIsAutoRotating(!isAutoRotating)} className={`p-2 rounded-xl border transition-all ${isAutoRotating ? 'bg-indigo-600/10 border-indigo-500/50 text-indigo-400 shadow-lg' : 'bg-white/5 border-white/10 text-slate-500'}`}>
               {isAutoRotating ? <Icons.Pause /> : <Icons.Play />}
             </button>
+            <button onClick={toggleAudio} className={`p-2 rounded-xl border transition-all ${isPlaying ? 'bg-green-600/10 border-green-500/50 text-green-400 shadow-lg' : 'bg-white/5 border-white/10 text-slate-500'}`} title={isPlaying ? (language === 'zh' ? '暂停音频' : 'Pause Audio') : (language === 'zh' ? '播放音频' : 'Play Audio')}>
+              <Icons.Audio />
+            </button>
             <button onClick={() => setPaletteIndex(prev => (prev + 1) % palettes.length)} className="p-2 rounded-xl bg-white/5 border border-white/10 text-slate-300 hover:bg-white/10 transition-all"><Icons.Palette /></button>
             <button onClick={saveAsImage} className="relative group overflow-hidden px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest flex items-center gap-2 transition-all bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg active:scale-95">
               <Icons.Camera /> {currentT.save}
@@ -283,13 +343,43 @@ const App = () => {
             <div className="relative w-0 h-0 flex items-center justify-center z-20">
               {textureParticles.map((p, i) => {
                 const proj = project(p);
-                return <div key={`p-${i}`} className="absolute rounded-full" style={{ width: '1px', height: '1px', backgroundColor: palettes[paletteIndex].colors[i % palettes[paletteIndex].colors.length], transform: `translate3d(${proj.x}px, ${proj.y}px, 0) scale(${proj.scale})`, opacity: proj.opacity * 0.3, zIndex: proj.zIndex }} />;
+                return (
+                  <div 
+                    key={`p-${i}`} 
+                    className="absolute rounded-full" 
+                    style={{ 
+                      width: '1px', 
+                      height: '1px', 
+                      backgroundColor: palettes[paletteIndex].colors[i % palettes[paletteIndex].colors.length], 
+                      transform: `translate3d(${proj.x}px, ${proj.y}px, 0) scale(${proj.scale})`, 
+                      opacity: proj.opacity * 0.3, 
+                      zIndex: proj.zIndex,
+                      willChange: 'transform, opacity',
+                      backfaceVisibility: 'hidden'
+                    }} 
+                  />
+                );
               })}
               {spherePoints.map((point, i) => {
                 const proj = project(point);
                 const baseFontSize = 8 + (point.weight * 11 * proj.scale);
                 return (
-                  <div key={i + point.text} className="absolute transition-all word-node group flex items-center justify-center" style={{ transform: `translate3d(${proj.x}px, ${proj.y}px, 0) scale(${proj.scale})`, fontSize: `${baseFontSize}px`, color: palettes[paletteIndex].colors[i % palettes[paletteIndex].colors.length], opacity: proj.opacity, zIndex: proj.zIndex + 100, fontWeight: '900', whiteSpace: 'nowrap' }}>
+                  <div 
+                    key={i + point.text} 
+                    className="absolute word-node group flex items-center justify-center" 
+                    style={{ 
+                      transform: `translate3d(${proj.x}px, ${proj.y}px, 0) scale(${proj.scale})`, 
+                      fontSize: `${baseFontSize}px`, 
+                      color: palettes[paletteIndex].colors[i % palettes[paletteIndex].colors.length], 
+                      opacity: proj.opacity, 
+                      zIndex: proj.zIndex + 100, 
+                      fontWeight: '900', 
+                      whiteSpace: 'nowrap',
+                      willChange: 'transform, opacity',
+                      backfaceVisibility: 'hidden',
+                      WebkitFontSmoothing: 'antialiased'
+                    }}
+                  >
                     <span className="word-inner text-center">{point.text}</span>
                   </div>
                 );

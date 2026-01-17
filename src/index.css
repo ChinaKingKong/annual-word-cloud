@@ -10,13 +10,17 @@ body {
 /* 词云样式 */
 .word-inner {
   filter: drop-shadow(0 0 8px rgba(0,0,0,0.9));
-  transition: all 0.3s;
+  /* 移除 transition 以避免动画卡顿 */
+  will-change: transform, filter, color;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 .word-node:hover .word-inner {
   filter: drop-shadow(0 0 15px white);
   color: white !important;
-  transform: scale(1.1);
+  transform: scale(1.1) translateZ(0);
+  transition: filter 0.2s, color 0.2s, transform 0.2s;
 }
 
 /* 截图时的样式 */
